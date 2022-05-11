@@ -5,7 +5,7 @@ locals {
 }
 
 resource "aws_iam_role" "iam_role" {
-  name = "${local.namespace}-tf-assume-role"
+  name               = "${local.namespace}-tf-assume-role"
   assume_role_policy = <<-EOF
     {
       "Version": "2012-10-17",
@@ -28,7 +28,7 @@ resource "aws_iam_role" "iam_role" {
 
 data "aws_iam_policy_document" "policy_doc" {
   statement {
-    actions = ["s3:ListBucket"]
+    actions   = ["s3:ListBucket"]
     resources = [aws_s3_bucket.s3_bucket.arn]
   }
 
@@ -52,12 +52,12 @@ data "aws_iam_policy_document" "policy_doc" {
 }
 
 resource "aws_iam_policy" "iam_policy" {
-  name = "${local.namespace}-tf-policy"
-  path = "/"
+  name   = "${local.namespace}-tf-policy"
+  path   = "/"
   policy = data.aws_iam_policy_document.policy_doc.json
 }
 
 resource "aws_iam_role_policy_attachment" "policy_attach" {
-  role = aws_iam_role.iam_role.name
+  role       = aws_iam_role.iam_role.name
   policy_arn = aws_iam_policy.iam_policy.arn
 }
